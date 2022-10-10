@@ -15,8 +15,9 @@ export default class PictureApiService {
       const data = await axios.get(
         `${url1}${API_KEY}&q=${this.searchQuery}${url2}`
       );
+      console.log(this, data);
       this.pageNumber += 1;
-      console.log(data);
+      return data.data;
     } catch {
       console.log(error);
     }
@@ -28,5 +29,9 @@ export default class PictureApiService {
 
   set query(newQuery) {
     this.searchQuery = newQuery;
+  }
+
+  resetPageNumber() {
+    this.pageNumber = 1;
   }
 }
