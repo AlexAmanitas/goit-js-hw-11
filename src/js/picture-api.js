@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Notiflix from 'notiflix';
 
 const API_KEY = '30451625-24b88a788a5d1862c6d5c9df8';
 
@@ -9,17 +10,42 @@ export default class PictureApiService {
   }
 
   async fetchPicture() {
-    const url1 = 'https://pixabay.com/api/?key=';
-    const url2 = `&image_type=photo&orientation=horizontal&safesearch=true&page=${this.pageNumber}&per_page=40`;
+    const base_url = 'https://pixabay.com/api/?';
+    const searchParams = new URLSearchParams({
+      key: API_KEY,
+      q: this.searchQuery,
+      image_type: 'photo',
+      orientation: 'horizontal',
+      safesearch: true,
+      page: this.pageNumber,
+      per_page: 40,
+    });
+
     try {
-      const data = await axios.get(
-        `${url1}${API_KEY}&q=${this.searchQuery}${url2}`
-      );
-      console.log(this, data);
+      const data = await axios.get(`${base_url}${searchParams}`);
+      // console.log(this, data);
+
+      console.log(data.data.hits);
+      if (!data.data.hits.length && this.pageNumber === 1) {
+        console.log(!data.data.hits.length);
+        Notiflix.Notify.failure(
+          'Sorry, there are no images matching your search query. Please try again.'
+        );
+        return;
+      }
+      if (!data.data.hits.length && this.pageNumber !== 1) {
+        Notiflix.Notify.warning(
+          "We're sorry, but you've reached the end of search results."
+        );
+        return;
+      }
+      if (this.pageNumber === 1) {
+        Notiflix.Notify.info(`Hooray! We found ${data.data.totalHits} images.`);
+      }
       this.pageNumber += 1;
-      return data.data;
+      return data.data.hits;
     } catch {
-      console.log(error);
+      error => console.log(error);
     }
   }
 

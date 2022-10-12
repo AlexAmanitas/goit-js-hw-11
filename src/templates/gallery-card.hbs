@@ -1,17 +1,25 @@
 <div class='photo-card'>
-  <img src='' alt='' loading='lazy' />
+  <a href='{{largeImageURL}}' class='gallery-item'>
+    <img
+      class='photo'
+      src='{{previewURL}}'
+      alt='{{tags}}'
+      loading='lazy'
+      {{! width='284px'
+      height='180px' }}
+    /></a>
   <div class='info'>
     <p class='info-item'>
-      <b>Likes</b>
+      <b>Likes</b>{{likes}}
     </p>
     <p class='info-item'>
-      <b>Views</b>
+      <b>Views</b>{{views}}
     </p>
     <p class='info-item'>
-      <b>Comments</b>
+      <b>Comments</b>{{comments}}
     </p>
     <p class='info-item'>
-      <b>Downloads</b>
+      <b>Downloads</b>{{downloads}}
     </p>
   </div>
 </div>
