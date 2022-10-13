@@ -22,15 +22,15 @@ const refs = {
   loader: document.querySelector('.loader'),
   homeButton: document.querySelector('.home-btn'),
   footer: document.querySelector('.footer'),
+  guard: document.querySelector('.guard'),
 };
 
-// const cardHeight = '60px';     throttle(onScroll, 300)
+let lightbox = null;
 
 refs.searchForm.addEventListener('submit', onSearch);
 refs.loadMoreButton.addEventListener('click', onClick);
 refs.homeButton.addEventListener('click', onSmoothScroll);
 refs.input.addEventListener('input', throttle(onInput), 300);
-// window.addEventListener('scroll', onScroll);
 
 const pictureServise = new PictureApiService();
 
@@ -70,17 +70,17 @@ function onClick() {
 }
 
 function renderGallery(arrayObj) {
+  lightbox && lightbox.destroy();
+
   if (!arrayObj) return;
   console.log(arrayObj);
   const marcUp = arrayObj.map(obj => galleryTpl(obj)).join(' ');
-  console.log(marcUp);
   refs.gallery.insertAdjacentHTML('beforeend', marcUp);
 
-  let lightbox = new SimpleLightbox('.gallery-item', {
+  lightbox = new SimpleLightbox('.gallery-item', {
     captionsData: 'alt',
     captionDelay: 250,
   });
-  lightbox.refresh();
 }
 
 function cleanMarcUp() {
