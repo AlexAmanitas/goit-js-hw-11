@@ -13,8 +13,8 @@ body {
 .search-form {
   display: flex;
   justify-content: center;
-  padding-top: 20px;
-  padding-bottom: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
   position: fixed;
   width: 1200px;
   background-color: rgb(247, 243, 121);
@@ -38,7 +38,7 @@ button {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  padding-top: 80px;
+  padding-top: 60px;
 }
 
 .photo-card {
