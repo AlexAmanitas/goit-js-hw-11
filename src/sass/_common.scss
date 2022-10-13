@@ -26,6 +26,7 @@ button {
   color: white;
   border: none;
   border-radius: 6px;
+  cursor: pointer;
 }
 
 .gallery {
@@ -54,6 +55,21 @@ button {
   align-items: center;
 }
 
+.footer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.load-more {
+}
+
+.home-btn {
+  z-index: 10;
+  transform: rotate(180deg);
+  margin-right: 30px;
+  cursor: pointer;
+}
+
 .loader {
   display: block;
   margin-left: auto;
@@ -63,4 +79,11 @@ button {
 .hidden {
   width: 0;
   height: 0;
+  padding: 0;
+}
+
+.center {
+  display: block;
+  margin-right: auto;
+  margin-left: auto;
 }

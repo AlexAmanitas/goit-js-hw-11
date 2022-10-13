@@ -33,12 +33,10 @@ export default class PictureApiService {
         );
         return;
       }
-      if (!data.data.hits.length && this.pageNumber !== 1) {
-        Notiflix.Notify.warning(
-          "We're sorry, but you've reached the end of search results."
-        );
-        return;
-      }
+      // if (data.data.hits.length < 40) {
+      //
+      //   return;
+      // }
       if (this.pageNumber === 1) {
         Notiflix.Notify.info(`Hooray! We found ${data.data.totalHits} images.`);
       }
