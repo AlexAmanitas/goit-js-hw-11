@@ -1,7 +1,7 @@
 @import '~node_modules/modern-normalize/modern-normalize.css';
 
 body {
-  padding: 20px;
+  padding-bottom: 30px;
 }
 
 .section {
@@ -13,16 +13,21 @@ body {
 .search-form {
   display: flex;
   justify-content: center;
-  margin-bottom: 30px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  position: fixed;
+  width: 1200px;
+  background-color: rgb(247, 243, 121);
 }
 .search-form > input {
   border-radius: 6px;
+  border-color: rgb(68, 137, 216);
 }
 
 button {
   margin-left: 20px;
   padding: 10px 20px;
-  background-color: rgb(68, 68, 216);
+  background-color: rgb(68, 137, 216);
   color: white;
   border: none;
   border-radius: 6px;
@@ -33,6 +38,7 @@ button {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+  padding-top: 80px;
 }
 
 .photo-card {

@@ -23,7 +23,6 @@ export default class PictureApiService {
 
     try {
       const data = await axios.get(`${base_url}${searchParams}`);
-      // console.log(this, data);
 
       console.log(data.data.hits);
       if (!data.data.hits.length && this.pageNumber === 1) {
@@ -33,10 +32,11 @@ export default class PictureApiService {
         );
         return;
       }
-      // if (data.data.hits.length < 40) {
-      //
-      //   return;
-      // }
+      if (this.pageNumber > data.data.totalHits / 40) {
+        Notiflix.Notify.warning(
+          "We're sorry, but you've reached the end of search results."
+        );
+      }
       if (this.pageNumber === 1) {
         Notiflix.Notify.info(`Hooray! We found ${data.data.totalHits} images.`);
       }
