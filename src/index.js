@@ -24,6 +24,7 @@ function onSearch(evt) {
   evt.preventDefault();
   pictureServise.query = evt.currentTarget.elements.searchQuery.value;
   fetchingQuery();
+  refs.input.value = '';
 }
 
 function fetchingQuery() {

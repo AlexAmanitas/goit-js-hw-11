@@ -1,5 +1,5 @@
 @import '~node_modules/modern-normalize/modern-normalize.css';
-
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap');
 body {
   padding-bottom: 30px;
 }
@@ -17,9 +17,8 @@ body {
   padding-bottom: 10px;
   position: fixed;
   width: 1200px;
-  // background-color: rgb(247, 243, 121);
   background-image: url('../images/example.jpg');
-  background-position-y: center;
+  background-position-y: 39%;
   background-size: cover;
 }
 .search-form > input {
@@ -58,6 +57,7 @@ button {
 .info {
   display: flex;
   justify-content: space-around;
+  font-family: 'Roboto';
 }
 
 .info-item {
