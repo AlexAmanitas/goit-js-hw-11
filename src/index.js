@@ -1,79 +1,58 @@
 import PictureApiService from './js/picture-api';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
-import Notiflix from 'notiflix';
 import galleryTpl from './templates/gallery-card.hbs';
 import throttle from 'lodash.throttle';
-
-Notiflix.Notify.init({
-  position: 'left-top',
-  // showOnlyTheLastOne: true,
-});
-
-// let lightbox = new SimpleLightbox('.gallery-item');
-// console.log('galleryBox', lightbox);
 
 const refs = {
   searchForm: document.querySelector('#search-form'),
   input: document.querySelector('input'),
   submitButton: document.querySelector('button'),
-  loadMoreButton: document.querySelector('.load-more'),
   gallery: document.querySelector('.gallery'),
   loader: document.querySelector('.loader'),
   homeButton: document.querySelector('.home-btn'),
-  footer: document.querySelector('.footer'),
-  guard: document.querySelector('.guard'),
 };
 
-let lightbox = null;
-
 refs.searchForm.addEventListener('submit', onSearch);
-refs.loadMoreButton.addEventListener('click', onClick);
 refs.homeButton.addEventListener('click', onSmoothScroll);
 refs.input.addEventListener('input', throttle(onInput), 300);
 
+let lightbox = null;
 const pictureServise = new PictureApiService();
 
 function onSearch(evt) {
   evt.preventDefault();
-  console.log(evt.currentTarget.elements.searchQuery.value);
   pictureServise.query = evt.currentTarget.elements.searchQuery.value;
+  fetchingQuery();
+}
 
+function fetchingQuery() {
+  observer.unobserve(refs.loader);
   pictureServise.resetPageNumber();
   cleanMarcUp();
   refs.loader.classList.remove('hidden');
-  pictureServise.fetchPicture().then(data => {
-    renderGallery(data);
-
-    refs.loader.classList.add('hidden');
-    if (data) {
+  pictureServise
+    .fetchPicture()
+    .then(data => {
+      if (!data) {
+        refs.loader.classList.add('hidden');
+        refs.submitButton.setAttribute('disabled', 'disabled');
+        refs.homeButton.classList.add('hidden');
+        return;
+      }
+      renderGallery(data);
+      refs.loader.classList.add('hidden');
       refs.homeButton.classList.remove('hidden');
-      refs.loadMoreButton.classList.remove('hidden');
-      refs.loadMoreButton.removeAttribute('disabled');
       refs.submitButton.setAttribute('disabled', 'disabled');
-    }
-  });
-}
-
-function onClick() {
-  refs.loader.classList.remove('hidden');
-  pictureServise.fetchPicture().then(data => {
-    renderGallery(data);
-    if (data.length < 40) {
-      refs.loadMoreButton.classList.add('hidden');
-      refs.homeButton.classList.add('center');
-      refs.loadMoreButton.setAttribute('disabled', 'disabled');
-      refs.footer.classList.add('center');
-    }
-    refs.loader.classList.add('hidden');
-  });
+    })
+    .catch(console.log);
 }
 
 function renderGallery(arrayObj) {
+  if (!arrayObj) return;
+
   lightbox && lightbox.destroy();
 
-  if (!arrayObj) return;
-  console.log(arrayObj);
   const marcUp = arrayObj.map(obj => galleryTpl(obj)).join(' ');
   refs.gallery.insertAdjacentHTML('beforeend', marcUp);
 
@@ -81,10 +60,49 @@ function renderGallery(arrayObj) {
     captionsData: 'alt',
     captionDelay: 250,
   });
+  observer.observe(refs.loader);
 }
 
 function cleanMarcUp() {
   refs.gallery.innerHTML = '';
+}
+
+const options = {
+  root: null,
+  rootMargin: '0px',
+  threshold: 0.1,
+};
+
+const observer = new IntersectionObserver(observerCallback, options);
+
+function observerCallback(entries, observer) {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      refs.loader.classList.remove('hidden');
+      pictureServise.fetchPicture().then(data => {
+        if (!data || data.length === 0) {
+          observer.unobserve(refs.loader);
+          refs.loader.classList.add('hidden');
+          return;
+        }
+        renderGallery(data);
+        refs.loader.classList.add('hidden');
+      });
+    }
+  });
+}
+
+function onSmoothScroll(evt) {
+  evt.preventDefault();
+  window.scrollTo({
+    top: 0,
+    left: 0,
+    behavior: 'smooth',
+  });
+}
+
+function onInput(evt) {
+  refs.submitButton.removeAttribute('disabled');
 }
 
 // function onScroll() {
@@ -108,17 +126,16 @@ function cleanMarcUp() {
 //   }, 500);
 // }
 
-function onSmoothScroll(evt) {
-  evt.preventDefault();
-  window.scrollTo({
-    top: 0,
-    left: 0,
-    behavior: 'smooth',
-  });
-}
-
-function onInput(evt) {
-  refs.submitButton.removeAttribute('disabled');
-  refs.footer.classList.remove('center');
-  refs.homeButton.classList.remove('center');
-}
+// function onClick() {
+//   refs.loader.classList.remove('hidden');
+//   pictureServise.fetchPicture().then(data => {
+//     renderGallery(data);
+//     if (data.length < 40) {
+//       // refs.loadMoreButton.classList.add('hidden');
+//       refs.homeButton.classList.add('center');
+//       // refs.loadMoreButton.setAttribute('disabled', 'disabled');
+//       // refs.footer.classList.add('center');
+//     }
+//     refs.loader.classList.add('hidden');
+//   });
+// }
