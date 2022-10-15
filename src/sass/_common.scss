@@ -6,6 +6,7 @@ body {
 
 .section {
   width: 1200px;
+  min-height: 500px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -34,6 +35,15 @@ button {
   border: none;
   border-radius: 6px;
   cursor: pointer;
+  transition: transform 300ms linear;
+  // transform-origin: center right;
+
+  &[disabled='disabled'] {
+    cursor: auto;
+    background-color: rgba(128, 128, 128, 0.8);
+    transform: rotate(180deg);
+    // transform-origin: center right;
+  }
 }
 
 .gallery {
@@ -72,8 +82,12 @@ button {
   right: 30px;
   z-index: 10;
   transform: rotate(180deg);
-  margin-right: 30px;
   cursor: pointer;
+  transition: transform 500ms linear;
+
+  &:hover {
+    transform: rotate(-180deg);
+  }
 }
 
 .loader {
