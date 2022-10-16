@@ -5,15 +5,6 @@ import galleryTpl from './templates/gallery-card.hbs';
 import throttle from 'lodash.throttle';
 import SmoothScroll from 'smoothscroll-for-websites';
 
-SmoothScroll({
-  stepSize: 175,
-  animationTime: 800,
-  accelerationDelta: 200,
-  accelerationMax: 6,
-  keyboardSupport: true,
-  arrowScroll: 100,
-});
-
 const refs = {
   searchForm: document.querySelector('#search-form'),
   input: document.querySelector('input'),
@@ -37,7 +28,6 @@ function onSearch(evt) {
   refs.input.value = '';
   pictureServise.resetPageNumber();
   cleanMarcUp();
-  // refs.loader.classList.remove('hidden');
   refs.submitButton.setAttribute('disabled', 'disabled');
   observer.unobserve(refs.loader);
 }
@@ -67,7 +57,6 @@ function renderGallery(data) {
   refs.homeButton.classList.remove('hidden');
 
   if (pictureServise.totalPage < pictureServise.pageNumber) {
-    console.log('unobserver');
     observer.unobserve(refs.loader);
     refs.loader.classList.add('hidden');
   }
@@ -99,14 +88,11 @@ const options = {
 
 const observer = new IntersectionObserver(observerCallback, options);
 
-function observerCallback(entries, observer) {
+function observerCallback(entries) {
   entries.forEach(entry => {
-    console.log(entry.isIntersecting);
     if (entry.isIntersecting) {
-      // refs.loader.classList.remove('hidden');
       fetchingQuery();
     }
-    // console.log(pictureServise.totalPage, pictureServise.pageNumber);
   });
 }
 
@@ -123,6 +109,14 @@ function onInput(evt) {
   refs.submitButton.removeAttribute('disabled');
 }
 
+SmoothScroll({
+  stepSize: 175,
+  animationTime: 800,
+  accelerationDelta: 200,
+  accelerationMax: 6,
+  keyboardSupport: true,
+  arrowScroll: 100,
+});
 // function onScroll() {
 //   setTimeout(() => {
 //     const documentRect = document.documentElement.getBoundingClientRect();

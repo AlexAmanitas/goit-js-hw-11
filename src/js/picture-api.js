@@ -32,18 +32,7 @@ export default class PictureApiService {
     try {
       const data = await axios.get(`${base_url}${searchParams}`);
       this.totalPage = Math.ceil(data.data.totalHits / 40);
-
-      // console.log(data);
-      // console.log(
-      //   'total',
-      //   this.totalPage,
-      //   typeof this.totalPage,
-      //   'current',
-      //   this.pageNumber,
-      //   typeof this.pageNumber
-      // );
       if (!data.data.hits.length) {
-        console.log('search query', this.searchQuery);
         Notiflix.Notify.failure(
           'Sorry, there are no images matching your search query. Please try again.'
         );
