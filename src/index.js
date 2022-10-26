@@ -34,17 +34,11 @@ function onSearch(evt) {
 
 function fetchingQuery() {
   refs.loader.classList.remove('hidden');
-  pictureServise
-    .fetchPicture()
-    .then(data => {
-      renderGallery(data);
-    })
-    .catch(console.log);
+  pictureServise.fetchPicture().then(renderGallery).catch(console.log);
 }
 
 function renderGallery(data) {
   if (!data) {
-    console.log('!!!DATA');
     observer.unobserve(refs.loader);
     refs.loader.classList.add('hidden');
     refs.submitButton.setAttribute('disabled', 'disabled');
@@ -82,8 +76,8 @@ function cleanMarcUp() {
 
 const options = {
   root: null,
-  rootMargin: '0px',
-  threshold: 0.1,
+  rootMargin: '200px',
+  threshold: 0,
 };
 
 const observer = new IntersectionObserver(observerCallback, options);
@@ -151,3 +145,11 @@ SmoothScroll({
 //     refs.loader.classList.add('hidden');
 //   });
 // }
+
+// function a(val) {
+//   return true - val;
+// }
+
+// const b = a('4') + a('-4') + a(-'4') + a(4);
+// console.log(b);
+// console.log(a('4'), a('-4'), a(-'4'), a(4));
