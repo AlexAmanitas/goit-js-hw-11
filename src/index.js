@@ -18,7 +18,10 @@ refs.searchForm.addEventListener('submit', onSearch);
 refs.homeButton.addEventListener('click', onSmoothScroll);
 refs.input.addEventListener('input', throttle(onInput), 300);
 
-let lightbox = null;
+const lightbox = new SimpleLightbox('.gallery-item', {
+  captionsData: 'alt',
+  captionDelay: 250,
+});
 const pictureServise = new PictureApiService();
 
 function onSearch(evt) {
@@ -58,16 +61,18 @@ function renderGallery(data) {
 
 function marcUp(dataArray) {
   if (!dataArray) return;
-
-  lightbox && lightbox.destroy();
-
   const marcUp = galleryTpl(dataArray);
   refs.gallery.insertAdjacentHTML('beforeend', marcUp);
+  const { height: cardHeight } = document
+    .querySelector('.gallery')
+    .firstElementChild.getBoundingClientRect();
 
-  lightbox = new SimpleLightbox('.gallery-item', {
-    captionsData: 'alt',
-    captionDelay: 250,
+  window.scrollBy({
+    top: cardHeight * 2,
+    behavior: 'smooth',
   });
+  lightbox.refresh();
+  console.log(lightbox);
 }
 
 function cleanMarcUp() {
