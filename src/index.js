@@ -26,10 +26,11 @@ const pictureServise = new PictureApiService();
 
 function onSearch(evt) {
   evt.preventDefault();
+  pictureServise.resetPageNumber();
   pictureServise.query = evt.currentTarget.elements.searchQuery.value;
   fetchingQuery();
   refs.input.value = '';
-  pictureServise.resetPageNumber();
+
   cleanMarcUp();
   refs.submitButton.setAttribute('disabled', 'disabled');
   observer.unobserve(refs.loader);
