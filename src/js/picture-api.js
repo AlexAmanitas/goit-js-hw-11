@@ -64,4 +64,7 @@ export default class PictureApiService {
   resetPageNumber() {
     this.pageNumber = 1;
   }
+  get page() {
+    return this.pageNumber;
+  }
 }

@@ -6,6 +6,7 @@ import throttle from 'lodash.throttle';
 import SmoothScroll from 'smoothscroll-for-websites';
 
 const refs = {
+  body: document.querySelector('body'),
   searchForm: document.querySelector('#search-form'),
   input: document.querySelector('input'),
   submitButton: document.querySelector('button'),
@@ -15,10 +16,11 @@ const refs = {
 };
 
 refs.searchForm.addEventListener('submit', onSearch);
-refs.homeButton.addEventListener('click', onSmoothScroll);
-refs.input.addEventListener('input', throttle(onInput), 300);
+refs.homeButton.addEventListener('click', onClickHomeBtn);
+refs.input.addEventListener('input', throttle(onInput, 300));
+window.addEventListener('wheel', throttle(onScroll, 300));
 
-const lightbox = new SimpleLightbox('.gallery-item', {
+const lightbox = new SimpleLightbox('.photo-card', {
   captionsData: 'alt',
   captionDelay: 250,
 });
@@ -52,8 +54,6 @@ function renderGallery(data) {
   marcUp(data);
   observer.observe(refs.loader);
   refs.loader.classList.add('hidden');
-  refs.homeButton.classList.remove('hidden');
-
   if (pictureServise.totalPage < pictureServise.pageNumber) {
     observer.unobserve(refs.loader);
     refs.loader.classList.add('hidden');
@@ -64,21 +64,14 @@ function marcUp(dataArray) {
   if (!dataArray) return;
   const marcUp = galleryTpl(dataArray);
   refs.gallery.insertAdjacentHTML('beforeend', marcUp);
-  const { height: cardHeight } = document
-    .querySelector('.gallery')
-    .firstElementChild.getBoundingClientRect();
-
-  window.scrollBy({
-    top: cardHeight * 2,
-    behavior: 'smooth',
-  });
   lightbox.refresh();
-  console.log(lightbox);
 }
 
 function cleanMarcUp() {
   refs.gallery.innerHTML = '';
 }
+
+//////////////////////  observer  \\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 const options = {
   root: null,
@@ -92,21 +85,35 @@ function observerCallback(entries) {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
       fetchingQuery();
+      const documentRect = document
+        .querySelector('.gallery')
+        .getBoundingClientRect();
+      console.log(documentRect);
     }
   });
 }
 
-function onSmoothScroll(evt) {
-  evt.preventDefault();
-  window.scrollTo({
-    top: 0,
-    left: 0,
-    behavior: 'smooth',
-  });
-}
+////////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 function onInput(evt) {
   refs.submitButton.removeAttribute('disabled');
+}
+
+function onScroll(evt) {
+  if (evt.deltaY < 0) {
+    refs.searchForm.classList.remove('hidden');
+    refs.homeButton.classList.remove('hidden');
+  } else {
+    refs.searchForm.classList.add('hidden');
+    refs.homeButton.classList.add('hidden');
+  }
+}
+
+function onClickHomeBtn() {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth',
+  });
 }
 
 SmoothScroll({
@@ -117,45 +124,3 @@ SmoothScroll({
   keyboardSupport: true,
   arrowScroll: 100,
 });
-// function onScroll() {
-//   setTimeout(() => {
-//     const documentRect = document.documentElement.getBoundingClientRect();
-//     console.log(documentRect.bottom);
-//     if (documentRect.bottom < document.documentElement.clientHeight + 100) {
-//       refs.loader.classList.remove('hidden');
-//       pictureServise
-//         .fetchPicture()
-//         .then(data => {
-//           // if (!data) {
-//           //   window.removeEventListener('scroll', onScroll);
-//           //   return;
-//           // }
-//           refs.loader.classList.add('hidden');
-//           renderGallery(data);
-//         })
-//         .catch();
-//     }
-//   }, 500);
-// }
-
-// function onClick() {
-//   refs.loader.classList.remove('hidden');
-//   pictureServise.fetchPicture().then(data => {
-//     renderGallery(data);
-//     if (data.length < 40) {
-//       // refs.loadMoreButton.classList.add('hidden');
-//       refs.homeButton.classList.add('center');
-//       // refs.loadMoreButton.setAttribute('disabled', 'disabled');
-//       // refs.footer.classList.add('center');
-//     }
-//     refs.loader.classList.add('hidden');
-//   });
-// }
-
-// function a(val) {
-//   return true - val;
-// }
-
-// const b = a('4') + a('-4') + a(-'4') + a(4);
-// console.log(b);
-// console.log(a('4'), a('-4'), a(-'4'), a(4));

@@ -8,17 +8,22 @@
     <link rel="stylesheet" href="./sass/index.scss" />
   </head>
   <body>
-    <section class="section scroll-container" id="scroll-container-id">
-      <form class="search-form" id="search-form">
-        <input
-          type="text"
-          name="searchQuery"
-          autocomplete="off"
-          placeholder="Search images..."
-        />
-        <button type="submit">Search</button>
-      </form>
+    <include src="./partials/icons.html"></include>
 
+    <form class="search-form" id="search-form">
+      <input
+        type="text"
+        name="searchQuery"
+        autocomplete="off"
+        placeholder="Search images..."
+      />
+      <button type="submit" class="search-btn">
+        <svg class="search-icon" width="18" height="18">
+          <use href="#icon-search"></use>
+        </svg>
+      </button>
+    </form>
+    <section class="section scroll-container" id="scroll-container-id">
       <div class="gallery"></div>
       <img
         class="loader hidden"
