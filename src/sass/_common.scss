@@ -22,13 +22,14 @@ a {
 
 .search-form {
   position: fixed;
-  z-index: 5;
-  display: flex;
-  justify-content: center;
+  width: 100%;
   padding-top: 12px;
   padding-bottom: 12px;
   margin: 0 auto;
-  width: 100%;
+
+  display: flex;
+  justify-content: center;
+  z-index: 5;
   background-color: rgb(88, 99, 255);
   transition: transform 250ms linear;
 
@@ -107,11 +108,11 @@ a {
 }
 
 .info-item {
-  color: #333333;
   display: flex;
   flex-direction: column;
   align-items: center;
   margin: 10px 0 5px;
+  color: #333333;
 }
 
 .info-icon {
